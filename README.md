@@ -1,2 +1,2 @@
-pick me - commerce
+pickme - commerce
 <!-- chmod +x start-dev.sh -execution -->
