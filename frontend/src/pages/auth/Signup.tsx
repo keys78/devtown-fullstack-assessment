@@ -3,7 +3,7 @@ import { Formik, FormikHelpers } from 'formik';
 import * as yup from 'yup';
 import { signupUser } from '../../reducers/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export type SignupData = {
   username: string;
