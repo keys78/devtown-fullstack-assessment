@@ -1,6 +1,6 @@
 import { IToken } from '../../../types'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
 
 
 // Get user

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
 import { getPersonalNotes } from '../../reducers/private/notes/noteSlice';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MagnifyingGlass } from 'phosphor-react';
+import { ArrowLeft } from 'phosphor-react';
 import SearchFilter from '../../components/shared/SearchFilter';
 import { characterLimit } from '../../utils/general';
 

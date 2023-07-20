@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useRef, useState } from 'react'
+import { useRef } from 'react'
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import { backdropVariant, modalVariant } from '../../utils/animations';
 

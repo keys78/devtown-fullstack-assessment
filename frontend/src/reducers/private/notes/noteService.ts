@@ -2,8 +2,8 @@ import axios from "axios"
 import { IToken } from "../../../types"
 import { toast } from "react-toastify"
 
-import io from 'socket.io-client';
-const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
+// import io from 'socket.io-client';
+// const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
 const toastOptions = {
     autoClose: 2000,
     hideProgressBar: true,
@@ -56,6 +56,7 @@ const createNote = async (taskData: any, token: IToken) => {
         },
     }
     const { data } = await axios.post(import.meta.env.VITE_APP_BASE_API + `api/v1/notes/create-note`, taskData, config)
+    // socket.emit('noteCreated', data)
     toast.success(data?.message, toastOptions);
     return data
 }

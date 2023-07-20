@@ -98,8 +98,8 @@
 
 
 import { useEffect, useState } from 'react';
-import { Formik, Form, Field, ErrorMessage, FieldArray } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import * as Yup from 'yup';
 import { createNote } from '../../reducers/private/notes/noteSlice';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
 import { Note } from '../../reducers/private/notes/noteSlice';
@@ -110,20 +110,18 @@ import Dropdown from '../shared/Dropdown';
 
 const socket = io('http://localhost:4000', { transports: ['websocket'] });
 
-const initialValues = {
 
-};
 
-const validationSchema = Yup.object({
-  category: Yup.string().required('Category is required'),
-  title: Yup.string().required('Title is required'),
-  tags: Yup.array().test('max-tags', 'You can add a maximum of 3 tags', (value) => {
-    return !value || value.length <= MAX_TAGS;
-  }),
-  status: Yup.string().required('Status is required'),
-  createdBy: Yup.string().required('Created By is required'),
-  note: Yup.string().required('Note is required'),
-});
+// const validationSchema = Yup.object({
+//   category: Yup.string().required('Category is required'),
+//   title: Yup.string().required('Title is required'),
+//   tags: Yup.array().test('max-tags', 'You can add a maximum of 3 tags', (value) => {
+//     return !value || value.length <= MAX_TAGS;
+//   }),
+//   status: Yup.string().required('Status is required'),
+//   createdBy: Yup.string().required('Created By is required'),
+//   note: Yup.string().required('Note is required'),
+// });
 
 const MAX_TAGS = 3;
 const tagOptions = [

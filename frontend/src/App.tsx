@@ -122,7 +122,7 @@
 // export default App;
 
 
-import { ReactElement } from "react";
+// import { ReactElement } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/Signup";
@@ -135,20 +135,20 @@ import NoteDetails from "./pages/user/NoteDetails";
 
 
 
-interface RouteConfig {
-  title: string;
-  path: string;
-  element: ReactElement;
-}
+// interface RouteConfig {
+//   title: string;
+//   path: string;
+//   element: ReactElement;
+// }
 
 function App() {
-  const routes: RouteConfig[] = [
-    // { path: "account", title: 'Account', element: <Accounts /> },
+  // const routes: RouteConfig[] = [
+  //   // { path: "account", title: 'Account', element: <Accounts /> },
 
-  ];
-  const adminRoutes: RouteConfig[] = [
-    // { path: "manage-products", title: 'Mananage Produts', element: <ManageProducts /> }
-  ];
+  // ];
+  // const adminRoutes: RouteConfig[] = [
+  //   // { path: "manage-products", title: 'Mananage Produts', element: <ManageProducts /> }
+  // ];
 
 
   return (

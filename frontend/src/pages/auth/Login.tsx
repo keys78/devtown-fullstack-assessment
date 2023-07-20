@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Formik, FormikHelpers } from "formik";
 import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from "../../network/hooks";
-import { loginUser, reset } from "../../reducers/auth/authSlice";
+import { loginUser } from "../../reducers/auth/authSlice";
 import { Link, useNavigate } from 'react-router-dom';
 
 
@@ -19,7 +19,8 @@ const Login = () => {
     const { user } = useAppSelector(state => state.user);
 
 
-    const { isSuccess, isLoading, isError, message, token } = useAppSelector((state) => state.auth);
+    const { isLoading, token } = useAppSelector((state) => state.auth);
+    // const { isSuccess, isLoading, isError, message, token } = useAppSelector((state) => state.auth);
     // const { user } = useAppSelector((state) => state.user);
     // const user = {}
 
@@ -170,9 +171,6 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-
-            {/* <div className='stripe_btm absolute bottom-[-300px] right-[-300px] h-[500px] border-[50px] border-orange-500 opacity-[0.7]'></div>
-            <div className='stripe_btm absolute bottom-[-335px] right-[-335px] h-[500px] border-[50px] border-[#000]'></div> */}
         </div>
     );
 };
