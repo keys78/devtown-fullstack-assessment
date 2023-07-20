@@ -11,8 +11,6 @@ const toastOptions = {
 
 
 
-
-
 const getSharedNotes = async (token: IToken) => {
     const authConfig = {
         headers: {

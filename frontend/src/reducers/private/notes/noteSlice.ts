@@ -4,7 +4,7 @@ import noteService from "./noteService";
 import { Auth } from "../../auth/authSlice";
 import errorHandler from "../../../utils/errorHandler";
 import io from 'socket.io-client';
-const socket = io('http://localhost:4000', { transports: ['websocket'] });
+const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
 
 interface Author {
   _id: string,

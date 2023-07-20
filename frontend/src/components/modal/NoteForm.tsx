@@ -108,7 +108,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import Select from 'react-select';
 import Dropdown from '../shared/Dropdown';
 
-const socket = io('http://localhost:4000', { transports: ['websocket'] });
+const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
 
 
 
