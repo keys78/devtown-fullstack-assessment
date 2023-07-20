@@ -50,7 +50,7 @@ const Login = () => {
               NotesApp
             </div>
           </div>
-          <p className='pb-8 text-center text-[16] s-767:pt-16 pt-24'>Login and resume your shopping experience</p>
+          <p className='pb-8 text-center text-[16] s-767:pt-16 pt-24'>Login</p>
 
           <div>
             <Formik

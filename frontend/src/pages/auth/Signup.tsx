@@ -33,12 +33,12 @@ const SignUp = () => {
     }
   };
 
-  const { token } = useAppSelector((state) => state.auth);
-  const isAuthenticated = token !== null;
+  // const { token } = useAppSelector((state) => state.auth);
+  // const isAuthenticated = token !== null;
 
-  if (isAuthenticated) {
-    return <Navigate to="/" />;
-  }
+  // if (isAuthenticated) {
+  //   return <Navigate to="/auth/login" />;
+  // }
 
   return (
     <section className="max-w-[100%] min-h-[100vh] w-full mx-auto dark:bg-veryDarkGrey">
