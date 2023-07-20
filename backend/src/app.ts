@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import noteRoutes from './routes/notes'
 import * as noteController from "./controllers/notes";
+import bodyParser from "body-parser";
 
 
 
@@ -28,6 +29,8 @@ export const io = new Server(httpServer, {
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 io.on('connection', (socket: Socket) => {
     console.log('A user connected.');

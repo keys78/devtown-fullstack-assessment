@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <div>
-            <div>Logo</div>
+            <div className='py-4 border-b border-gray-200 text-[20px] font-bold'>NotesApp</div>
             {children}
             <Navbar />
         </div>

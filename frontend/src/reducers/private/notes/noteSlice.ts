@@ -144,8 +144,15 @@ import errorHandler from "../../../utils/errorHandler";
 import io from 'socket.io-client';
 const socket = io('http://localhost:4000', { transports: ['websocket'] });
 
+interface Author {
+  _id: string,
+  username: string
+}
+
+
 export interface Note {
-  _id: any;
+  author?: Author;
+  _id?: any;
   category: string,
   title: string,
   tags: [],

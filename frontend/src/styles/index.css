@@ -6,6 +6,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.mansonary-layout > div:nth-of-type(5n + 1) {
+  @apply bg-[#49C4E5] text-[#000];
+}
+.mansonary-layout > div:nth-of-type(5n + 2) {
+  @apply bg-[#8471F2] text-[#000];
+}
+.mansonary-layout > div:nth-of-type(5n + 3) {
+  @apply bg-[#67E2AE] text-[#000];
+}
+.mansonary-layout > div:nth-of-type(5n + 4) {
+  @apply bg-[#ff6fa2] text-[#000];
+}
+.mansonary-layout > div:nth-of-type(5n + 5) {
+  @apply bg-[#ffca5e] text-[#000];
+}
+
 *{padding: 0; margin: 0; box-sizing: border-box;}
 html { background: rgb(38, 31, 71); color: #f3f3f3; scroll-behavior: smooth;}
 
@@ -19,3 +35,9 @@ body { max-width: 1220px; margin: 0 auto; padding: 0 80px;}
 .password-input > .input-class:focus { border: 1px solid #e8b72f;}
 .input-class-p { background-color: transparent; height: 100%; border: 0; outline: 0; padding:0; width: 100%; height: 45px; width: 220px; }
 .chp { height: 40px !important; }
+
+
+
+@media screen and (max-width: 767px) {
+  body { padding: 0 16px;}
+}

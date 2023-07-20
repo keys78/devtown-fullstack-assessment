@@ -1,4 +1,4 @@
-export const characterLimit = (text: string | undefined, limit: number) => {
+export const characterLimit = (text: any | undefined, limit: number) => {
   if (typeof text === 'undefined') {
     return undefined;
   }

@@ -67,11 +67,44 @@ export const getSingleNoteHandler: RequestHandler<{ id: string }> = async (req:A
 
 
 
-export const createNoteHandler: RequestHandler<any, any, Note, any> = async ( req: AuthRequest, res: Response, next: NextFunction) => {
+// export const createNoteHandler: RequestHandler<any, any, Note, any> = async ( req: AuthRequest, res: Response, next: NextFunction) => {
+//   const { category, title, tags, isPersonal, note } = req.body;
+
+//   try {
+
+//     if (!category || !title || !tags || isPersonal === undefined || !note) {
+//       throw createHttpError(400, 'Missing field');
+//     }
+
+//     const user = await UserModel.findById(req.user.id);
+//     if (!user) return res.status(404).json({ message: 'User not found' });
+
+//     const author = { id: user._id, username: user.username };
+
+//     const newNote = await NoteModel.create({
+//       author,
+//       category,
+//       title,
+//       tags,
+//       isPersonal,
+//       note,
+//     });
+
+//     res.status(201).json(newNote);
+
+//     if (!isPersonal) {
+//       io.emit('noteCreated', newNote);
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
+export const createNoteHandler: RequestHandler<any, any, Note, any> = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { category, title, tags, isPersonal, note } = req.body;
 
   try {
-
     if (!category || !title || !tags || isPersonal === undefined || !note) {
       throw createHttpError(400, 'Missing field');
     }
@@ -90,11 +123,13 @@ export const createNoteHandler: RequestHandler<any, any, Note, any> = async ( re
       note,
     });
 
-    res.status(201).json(newNote);
-
+    let message = 'Note created successfully';
     if (!isPersonal) {
       io.emit('noteCreated', newNote);
+      message = 'Shared note created successfully';
     }
+
+    res.status(201).json({ message, newNote });
   } catch (error) {
     next(error);
   }
@@ -102,6 +137,61 @@ export const createNoteHandler: RequestHandler<any, any, Note, any> = async ( re
 
 
 
+export const updateNoteHandler: RequestHandler<any, any, Partial<Note>, any> = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { category, title, tags, isPersonal, note } = req.body;
+
+  try {
+    const noteId = req.params.noteId;
+
+    // Check if the note exists
+    const existingNote = await NoteModel.findById(noteId);
+    if (!existingNote) {
+      return res.status(404).json({ message: 'Note not found' });
+    }
+
+    // Update the note properties
+    existingNote.category = category || existingNote.category;
+    existingNote.title = title || existingNote.title;
+    existingNote.tags = tags || existingNote.tags;
+    existingNote.isPersonal = isPersonal !== undefined ? isPersonal : existingNote.isPersonal;
+    existingNote.note = note || existingNote.note;
+
+    const updatedNote = await existingNote.save();
+
+    res.status(200).json({ message: 'Note updated successfully', updatedNote });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const deleteNoteHandler: RequestHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const noteId = req.params.noteId;
+
+    // Check if the note exists
+    const existingNote = await NoteModel.findById(noteId);
+    if (!existingNote) {
+      return res.status(404).json({ message: 'Note not found' });
+    }
+
+    // Check if the logged-in user is the author of the note
+    if (existingNote.author.id.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You are not authorized to delete this note' });
+    }
+
+    // Delete the note
+    await existingNote.deleteOne();
+
+    res.status(200).json({ message: 'Note deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 

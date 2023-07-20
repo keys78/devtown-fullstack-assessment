@@ -217,27 +217,6 @@ const NoteForm = () => {
             </div>
 
 
-            {/* <div>
-              <label htmlFor="tags">Tags</label>
-             
-                  <Select
-                    isMulti
-                    {...field}
-                    options={tagOptions}
-                    value={selectedTags}
-                    onChange={(selectedOptions) => {
-                      if (selectedOptions && selectedOptions.length > MAX_TAGS) {
-                        setSelectedTags(selectedOptions.slice(0, MAX_TAGS));
-                      } else {
-                        setSelectedTags(selectedOptions);
-                      }
-                      form.setFieldValue('tags', selectedOptions.map(tag => tag.value));
-                    }}
-                    placeholder="Select tags..."
-                  />
-              <ErrorMessage name="tags" component="div" />
-            </div> */}
-
             <div className='flex'>
               <p className='text-white'>Is a personal note</p>
               <Field type="checkbox" name="isPersonal" />
