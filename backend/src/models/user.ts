@@ -35,11 +35,7 @@ const userSchema = new Schema({
             message: "Please provide a valid email"
         }
     },
-    reviewedApp: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
-    boards: [
-        { type: Schema.Types.ObjectId, ref: 'Board' }
-    ],
     password: {
         type: String,
         required: [true, "Please add a password"],

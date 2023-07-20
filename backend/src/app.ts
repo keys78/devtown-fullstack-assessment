@@ -1,32 +1,70 @@
+import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
+import cors from 'cors';
+import { Server, Socket } from 'socket.io';
+import http from 'http'
 import morgan from "morgan";
-import cors from "cors"
 import createHttpError, { isHttpError } from "http-errors";
 import authRoutes from "./routes/auth";
-import { checkout } from "./routes/stripe";
-const app = express();
-app.use(cors());
+import userRoutes from "./routes/user";
+import noteRoutes from './routes/notes'
+import * as noteController from "./controllers/notes";
 
+
+
+const app = express();
+
+export const httpServer = http.createServer(app);
+export const io = new Server(httpServer, {
+    transports: ['websocket'],
+    cors: {
+        origin: 'http://127.0.0.1:5174',
+        methods: ['GET', 'POST'],
+    }
+});
+
+
+// Middleware
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
+io.on('connection', (socket: Socket) => {
+    console.log('A user connected.');
 
-// authentication 
-app.use('/auth', authRoutes);
+    socket.emit('currentNotes', noteController.createNoteHandler)
 
-app.use("/stripe", checkout);
+    socket.on('isTyping', () => {
+        socket.broadcast.emit('userTyping');
+    });
+    socket.on('isNotTyping', () => {
+        socket.broadcast.emit('userNotTyping');
+    });
 
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('A user disconnected.');
+    });
+});
+
+
+
+// Authentication
+app.use("/auth", authRoutes);
+app.use('/user', userRoutes);
+app.use("/api/v1/notes", noteRoutes); 
+
+// Landing route
 app.get("/", (req, res) =>
-    res.json({ success: true, message: "pickme api is running!" })
+    res.json({ success: true, message: "NotesApp api is running!" })
 );
 
-
+// 404 Not Found middleware
 app.use((req, res, next) => {
     next(createHttpError(404, "Endpoint not found"));
 });
 
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// Error handling middleware
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
     console.error(error);
     let errorMessage = "Internal Server Error";
@@ -37,5 +75,6 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
     }
     res.status(statusCode).json({ error: errorMessage });
 });
+
 
 export default app;
