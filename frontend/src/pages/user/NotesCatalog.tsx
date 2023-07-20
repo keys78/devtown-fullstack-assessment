@@ -62,7 +62,7 @@ const NotesCatalog = () => {
       {filteredNotes.length ? (
         <div className='grid grid-cols-2 gap-5'>
           {filteredNotes.map((val) => (
-            <Link to={`/user/note/${val?._id}`} key={val?._id}>
+            <Link to={`/note/${val?._id}`} key={val?._id}>
               <div className='border border-white mb-[20px] rounded-[10px]'>
                 <div className='p-4'>
                 <h1 className='text-[24px] pb-4'>{val?.title}</h1>

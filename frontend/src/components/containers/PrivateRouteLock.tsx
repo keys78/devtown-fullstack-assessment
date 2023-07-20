@@ -1,21 +1,23 @@
 
-// import { Navigate } from "react-router-dom";
-// import { useAppSelector } from "../../network/hooks";
+import { Navigate } from "react-router-dom";
+import { useAppSelector } from "../../network/hooks";
+
+interface Props {
+    Component: any
+}
+
+const PrivateRoute = ({ Component }:Props ) => {
+    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('ntp-token') : null;
+    const token2 = JSON.parse(storedToken as string);
+    const { user } = useAppSelector(state => state.user);
+    const isAuthenticated = token2 !== null && user.username !== null;
 
 
-// const PrivateRoute = ({ Component }) => {
-//     const storedToken = typeof window !== 'undefined' ? localStorage.getItem('ent-token') : null;
-//     const token2 = JSON.parse(storedToken as string);
-//     const { user } = useAppSelector(state => state.user);
-//     const { token } = useAppSelector(state => state.auth);
-//     const isAuthenticated = token2 !== null && user?.username!== null;
+    return isAuthenticated ? (
+        <Component />
+    ) : (
+        <Navigate to={'/auth/login'} replace />
+    );
+};
 
-
-//     return isAuthenticated ? (
-//         <Component />
-//     ) : (
-//         <Navigate to={'/auth/login'} replace />
-//     );
-// };
-
-// export default PrivateRoute;
+export default PrivateRoute;

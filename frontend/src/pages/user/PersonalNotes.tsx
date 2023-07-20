@@ -18,7 +18,7 @@ const PersonalNotes = () => {
   const handleCategoryGet = (note: { category?: string }) => {
     if (note?.category) {
       const queryParams = new URLSearchParams({ q: note.category });
-      navigate(`/user/dashboard/personal/catalog?${queryParams.toString()}`);
+      navigate(`/personal/catalog?${queryParams.toString()}`);
     }
   };
 
@@ -45,7 +45,7 @@ const PersonalNotes = () => {
       </div>
       <h1>Personal Notes</h1>
       <div className='mansonary-layout grid s-767:grid-cols-2 s-767:gap-6 gap-4'>
-        <div onClick={() => (navigate(`/user/dashboard/personal/catalog?${'all'}`))} className='h-[120px] rounded-[10px] p-4 relative cursor-pointer' key='all'>
+        <div onClick={() => (navigate(`/personal/catalog?${'all'}`))} className='h-[120px] rounded-[10px] p-4 relative cursor-pointer' key='all'>
           <h1 className='text-[30px] font-medium capitalize'>All</h1>
           <h1 className='absolute bottom-5 right-5 text-[20px] font-medium'>{notes.length}</h1>
         </div>

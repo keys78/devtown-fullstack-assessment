@@ -122,7 +122,7 @@
 // export default App;
 
 
-// import { ReactElement } from "react";
+import { ReactElement } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/Signup";
@@ -132,24 +132,25 @@ import SharedNotes from "./pages/user/SharedNotes";
 import Layout from "./components/containers/Layout";
 import NotesCatalog from "./pages/user/NotesCatalog";
 import NoteDetails from "./pages/user/NoteDetails";
+import PrivateRoute from "./components/containers/PrivateRouteLock";
 
 
 
-// interface RouteConfig {
-//   title: string;
-//   path: string;
-//   element: ReactElement;
-// }
+interface RouteConfig {
+  path: string;
+  element: ReactElement;
+}
 
 function App() {
-  // const routes: RouteConfig[] = [
-  //   // { path: "account", title: 'Account', element: <Accounts /> },
+  const routes: RouteConfig[] = [
+    { path: "/", element: <Dashboard /> },
+    { path: "/personal", element: <PersonalNotes /> },
+    { path: "/personal/catalog", element: <NotesCatalog /> },
+    { path: "/shared", element: <SharedNotes /> },
+    { path: "/shared/catalog", element: <NotesCatalog /> },
+    { path: "/note/:noteId", element: <NoteDetails /> },
 
-  // ];
-  // const adminRoutes: RouteConfig[] = [
-  //   // { path: "manage-products", title: 'Mananage Produts', element: <ManageProducts /> }
-  // ];
-
+  ];
 
   return (
     <>
@@ -157,13 +158,20 @@ function App() {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<SignUp />} />
-          <Route path="/user/dashboard" element={<Layout><Dashboard /></Layout>} />
-          <Route path="/user/dashboard/personal" element={<Layout><PersonalNotes /></Layout>} />
-          <Route path="/user/dashboard/personal/catalog" element={<Layout><NotesCatalog /></Layout>} />
-          <Route path="/user/dashboard/shared" element={<Layout><SharedNotes /></Layout>} />
-          <Route path="/user/dashboard/shared/catalog" element={<Layout><NotesCatalog /></Layout>} />
-          <Route path="/user/note/:noteId" element={<Layout><NoteDetails /></Layout>} />
-
+          <Route
+            path="/*"
+            element={
+              <PrivateRoute
+                Component={() => (
+                  <Routes>
+                    {routes.map((val) =>
+                      <Route path={val.path} element={<Layout>{val.element}</Layout>} />
+                    )}
+                  </Routes>
+                )}
+              />
+            }
+          />
           <Route path="*" element={<div>Not foundedsda</div>} />
         </Routes>
       </Router>

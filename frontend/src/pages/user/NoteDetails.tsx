@@ -46,7 +46,7 @@ const NoteDetails = () => {
             <span key={tag}>{tag}</span>
           ))}
         </div>
-        <div className='gen-format' dangerouslySetInnerHTML={sanitizeHTML(note?.note)} />
+        <div dangerouslySetInnerHTML={sanitizeHTML(note?.note)} />
         <h4>{note?.author?.username}</h4>
       </div>
     </div>
