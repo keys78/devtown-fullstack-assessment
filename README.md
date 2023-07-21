@@ -5,6 +5,9 @@ Notexis a web application designed to revolutionize the way users create, organi
 * User Authentication and Security
 * Search and Filtering
 
+* PNB: Incase of render's slow spin-up time for account creation, here is a test user details for quick check `email: testuser@email.com`,  `password: 123456`
+
+
 ## The Frontend
 
 ### Tools
