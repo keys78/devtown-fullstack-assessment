@@ -40,11 +40,20 @@ const NotesCatalog = () => {
   const categoryParam = queryParams.get('q')?.toLowerCase();
   const [searchQuery, setSearchQuery] = useState('');
 
+  // const filteredNotes = categoryParam === 'all'
+  //   ? notes
+  //   : categoryParam
+  //     ? notes?.filter(note => note?.category?.toLowerCase() === categoryParam)
+  //     : notes?.filter(note => note?.title?.toLowerCase().includes(searchQuery?.toLowerCase()));
+
   const filteredNotes = categoryParam === 'all'
-    ? notes
-    : categoryParam
-      ? notes?.filter(note => note?.category?.toLowerCase() === categoryParam)
-      : notes?.filter(note => note?.title?.toLowerCase().includes(searchQuery?.toLowerCase()));
+  ? notes?.filter(note => note?.title?.toLowerCase().includes(searchQuery?.toLowerCase()))
+  : categoryParam
+    ? notes?.filter(note => (
+        note?.category?.toLowerCase() === categoryParam &&
+        note?.title?.toLowerCase().includes(searchQuery?.toLowerCase())
+      ))
+    : notes?.filter(note => note?.title?.toLowerCase().includes(searchQuery?.toLowerCase()));
 
   const handleSortChange = (event: { target: { value: any; }; }) => {
     const selectedSortOption = event.target.value;
