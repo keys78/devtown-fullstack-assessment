@@ -43,6 +43,7 @@ const UpdateNote = ({ note }: Props) => {
   }, [dispatch, notes]);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     setSelectedTags(note.tags.map((tag) => tagOptions.find((option) => option.value === tag)!));
     setNoteEditorContent(note.note);
   }, [note]);
@@ -52,16 +53,12 @@ const UpdateNote = ({ note }: Props) => {
   const category = ['fun', 'school', 'home'];
 
 
-
-
-  
-
   return (
     <Formik
     initialValues={{
       category: note?.category || '',
       title: note?.title || '',
-      tags: [] as string[], // Set the type of 'tags' to string[]
+      tags: [] as string[], 
       isPersonal: note?.isPersonal || false,
       note: '',
     }}

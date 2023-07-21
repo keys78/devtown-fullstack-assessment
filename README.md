@@ -47,7 +47,7 @@ To set up and run the frontend application locally, follow these step-by-step in
 5. To start the dev server run:```yarn dev``` and the application will be available at `http://127.0.0.1:5173/` by default.
 6. To build for production: ```yarn build```
 7. To run unit tests, use: ```yarn test```
-8. Live Url : https://emmanuelo-lendsqr-fe-test.vercel.app/
+8. Live Url : https://emmanuelo-devtown-assessment.vercel.app/
 
 ## The Backend
 
