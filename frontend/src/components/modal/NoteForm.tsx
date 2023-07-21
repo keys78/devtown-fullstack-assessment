@@ -130,7 +130,6 @@ const tagOptions = [
   { value: '#tag3', label: '#Tag 3' },
   { value: '#tag4', label: '#Tag 4' },
   { value: '#tag5', label: '#Tag 5' },
-  // Add more tags options here if needed
 ];
 
 
@@ -184,7 +183,7 @@ const NoteForm = () => {
             <Dropdown
               item={category}
               setItem={props?.setFieldValue}
-              placeholder='Select category'
+              placeholder='Select category or create one'
               label={'category'}
             />
             <div>

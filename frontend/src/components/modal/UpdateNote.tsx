@@ -61,19 +61,18 @@ const UpdateNote = ({ note }: Props) => {
     initialValues={{
       category: note?.category || '',
       title: note?.title || '',
-      tags: note?.tags || [], 
+      tags: [] as string[], // Set the type of 'tags' to string[]
       isPersonal: note?.isPersonal || false,
-      note: '', 
+      note: '',
     }}
-      onSubmit={(values) => {
-        values.note = noteEditorContent;
-        values.tags = selectedTags.map((tag) => tag.value) as string[];
-
-        dispatch(createNote({ noteData: values }));
-        navigate(-1)
-        console.log('sending', values);
-      }}
-    >
+    onSubmit={(values) => {
+      values.note = noteEditorContent;
+      values.tags = selectedTags.map((tag) => tag.value) as string[];
+  
+      dispatch(createNote({ noteData: values }));
+      navigate(-1);
+    }}
+  >
       {(props) => (
         <Form className="!text-black" onSubmit={props.handleSubmit}>
           <Dropdown

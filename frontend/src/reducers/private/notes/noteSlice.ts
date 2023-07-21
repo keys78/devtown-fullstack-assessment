@@ -13,15 +13,16 @@ interface Author {
 
 
 export interface Note {
-  createdAt: string;
+  createdAt?: string;
   author?: Author;
-  _id?: any;
-  category: string,
-  title: string,
-  tags: [],
-  isPersonal: boolean,
-  note: string,
+  _id?: string;
+  category: string;
+  title: string;
+  tags: string[]; 
+  isPersonal: boolean;
+  note: string;
 }
+
 
 interface NotesState {
   isLoading: boolean;
@@ -218,7 +219,7 @@ export const noteSlice = createSlice({
       .addCase(updateNote.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateNote.fulfilled, (state, action) => {
+      .addCase(updateNote.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
       })
