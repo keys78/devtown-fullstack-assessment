@@ -24,7 +24,7 @@ export const getUser: RequestHandler = async (req: AuthRequest, res, next) => {
       throw createHttpError(404, "Invalid user id");
     }
 
-    const user = await UserModel.findById(id).populate('savedItems');
+    const user = await UserModel.findById(id);
 
     res.status(200).json(user);
   } catch (error) {

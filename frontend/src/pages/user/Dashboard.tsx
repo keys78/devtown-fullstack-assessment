@@ -1,7 +1,7 @@
 import { FolderNotch } from 'phosphor-react';
 // import Navbar from '../../components/navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
-import NoteForm from '../../components/modal/NoteForm';
+// import NoteForm from '../../components/modal/NoteForm';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Dashboard = () => {
           </div>
       </div>
       {/* <Navbar /> */}
-      <NoteForm />
+      {/* <NoteForm /> */}
     </div>
   );
 };

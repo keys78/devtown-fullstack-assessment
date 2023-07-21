@@ -9,8 +9,6 @@ interface LayoutProps {
     children: ReactNode;
 }
 
-
-
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const dispatch = useAppDispatch();
 
@@ -21,11 +19,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
     return (
         <div>
-            <div className='py-4 border-b border-gray-200 flex items-center justify-between'>
-                <div className=' text-[24px] font-bold'>NotesApp</div>
-                <button onClick={() => logoutUser()}>Logout</button>
+            <div className='fixed top-0 left-0 w-full bg-[#060226] '>
+                <div className='max-w-[1220px] s-767:px-[80px] px-[16px] mx-auto py-4 flex items-center justify-between'>
+                    <div className=' text-[24px] font-bold'>NotesApp</div>
+                    <button className='font-medium' onClick={() => logoutUser()}>Logout</button>
+                </div>
             </div>
-            {children}
+            <div className='py-[100px]'>
+                {children}
+            </div>
             <Navbar />
         </div>
     );

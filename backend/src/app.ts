@@ -36,6 +36,8 @@ io.on('connection', (socket: Socket) => {
     console.log('A user connected.');
 
     socket.emit('currentNotes', noteController.createNoteHandler)
+    socket.emit('updatedNotes', noteController.updateNoteHandler)
+    socket.emit('deletedNotes', noteController.deleteNoteHandler)
 
     socket.on('isTyping', () => {
         socket.broadcast.emit('userTyping');

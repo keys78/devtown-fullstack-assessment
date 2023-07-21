@@ -175,7 +175,6 @@ const NoteForm = () => {
           values.tags = selectedTags.map(tag => tag.value) as string[]; // Explicitly cast the type
 
           dispatch(createNote({ noteData: values }));
-          console.log('sending', values)
         }}
       >
         {/* {({ handleSubmit }) => ( */}
@@ -189,12 +188,9 @@ const NoteForm = () => {
               label={'category'}
             />
             <div>
-              <label htmlFor="title">Title</label>
-              <Field type="text" name="title" placeholder="Enter title" />
+              <Field type="text" name="title" className="w-full py-1 mt-4" placeholder="Enter title" />
               <ErrorMessage name="title" component="div" />
             </div>
-
-            {/* <TagsField name="tags" value={props.values.tags} onChange={props.setFieldValue} /> */}
 
             <div>
               <label htmlFor="tags">Tags</label>
@@ -215,7 +211,7 @@ const NoteForm = () => {
             </div>
 
 
-            <div className='flex'>
+            <div className='flex items-center space-x-2 py-3'>
               <p className='text-white'>Is a personal note</p>
               <Field type="checkbox" name="isPersonal" />
             </div>
@@ -237,7 +233,8 @@ const NoteForm = () => {
               <ErrorMessage name="note" component="div" />
             </div>
 
-            <button type="submit">Add Note</button>
+            <button className="bg-black text-white px-4 py-1" type="submit">
+              Add Note</button>
           </Form>
         )}
       </Formik>

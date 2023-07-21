@@ -33,7 +33,7 @@ const getPersonalNotes = async (token: IToken) => {
     return data
 }
 
-const getNote = async (noteId: string,  token: IToken) => {
+const getNote = async (noteId: string, token: IToken) => {
     const authConfig = {
         headers: {
             "Content-Type": "application/json",
@@ -60,11 +60,39 @@ const createNote = async (taskData: any, token: IToken) => {
 }
 
 
+const updateNote = async (nodeId: any, noteData: unknown, token: IToken) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    const { data } = await axios.patch(import.meta.env.VITE_APP_BASE_API + `api/v1/notes/update-note/${nodeId}`, noteData, config)
+    toast.success(data?.message, toastOptions);
+    return data
+}
+
+
+const deleteNote = async (noteId: any, token: IToken) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    }
+    const { data } = await axios.delete(import.meta.env.VITE_APP_BASE_API + `api/v1/notes/delete-note/${noteId}`, config)
+    toast.success(data?.message, toastOptions);
+    return data
+}
+
+
 const noteService = {
     getSharedNotes,
     getPersonalNotes,
     getNote,
     createNote,
+    updateNote,
+    deleteNote
 
 }
 

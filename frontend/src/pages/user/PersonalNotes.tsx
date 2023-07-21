@@ -43,7 +43,7 @@ const PersonalNotes = () => {
         <button className='flex items-center' onClick={() => navigate(-1)}><ArrowLeft weight='bold' size={16} color="#ececec" />&nbsp;&nbsp;Back</button>
         <SearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} placeholder='Search category...'/>
       </div>
-      <h1>Personal Notes</h1>
+      <h1 className='pb-4'>Personal Notes</h1>
       <div className='mansonary-layout grid s-767:grid-cols-2 s-767:gap-6 gap-4'>
         <div onClick={() => (navigate(`/personal/catalog?${'all'}`))} className='h-[120px] rounded-[10px] p-4 relative cursor-pointer' key='all'>
           <h1 className='text-[30px] font-medium capitalize'>All</h1>

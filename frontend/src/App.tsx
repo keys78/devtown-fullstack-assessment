@@ -133,6 +133,7 @@ import Layout from "./components/containers/Layout";
 import NotesCatalog from "./pages/user/NotesCatalog";
 import NoteDetails from "./pages/user/NoteDetails";
 import PrivateRoute from "./components/containers/PrivateRouteLock";
+import VerifyEmail from "./pages/user/VerifyEmail";
 
 
 
@@ -158,6 +159,7 @@ function App() {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/signup" element={<SignUp />} />
+          <Route path="/:id/verify/:token" element={<VerifyEmail />} />
           <Route
             path="/*"
             element={

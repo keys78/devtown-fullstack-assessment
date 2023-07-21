@@ -36,7 +36,7 @@ const confirmEmailMessage = (url: string) => `
 
                                             <div
                                                 style="font-size: 16px; line-height:1.4; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #082446;">
-                                                Welcome to iNote!</div>
+                                                Welcome to NotesApp!</div>
 
                                             <div>&nbsp;</div>
 
@@ -49,13 +49,11 @@ const confirmEmailMessage = (url: string) => `
                                             <div>&nbsp;</div>
                                             <div>&nbsp;</div>
 
-                                            <div>
                                                 <a href=${url}>
                                                     <button
                                                         style="background: #A8A4FF; color: #ffffff; padding:10px 20px; border-radius: 5px; cursor: pointer; font-size: 17px;">Confirm
                                                         email address</button>
                                                 </a>
-                                            </div>
                                             <div>&nbsp;</div>
                                             <div
                                                 style="font-size: 16px; line-height:1.4;  letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #031429;">
@@ -73,10 +71,10 @@ const confirmEmailMessage = (url: string) => `
                                             <div>&nbsp;</div>
                                             <div
                                                 style="font-size: 12px; line-height:1.4; font-style: italic; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #031429;">
-                                                Copyright @2022</div>
+                                                Copyright @2023</div>
                                             <div
                                                 style="font-size: 12px; line-height:1.4; font-style: italic; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #031021;">
-                                                All rights reserved Arctic Travels
+                                                All rights reserved NotesApp
                                             </div>
                                             <div
                                             style="font-size: 12px; line-height:1.4; font-style: italic; letter-spacing: 0px; font-family: 'Roboto', sans-serif; color: #031226;">

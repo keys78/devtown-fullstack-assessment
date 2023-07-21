@@ -100,7 +100,8 @@ export const login: RequestHandler = async (req, res, next) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
 
-      const url = `${process.env.BASE_URL}user/${user.id}/verify/${token.token}`;
+      const url = `${process.env.BASE_URL}${user.id}/verify/${token.token}`;
+      console.log('url', url)
 
       await sendEmail({
         to: user.email,
