@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { signupUser } from '../../reducers/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
 import { Link } from 'react-router-dom';
+import Loader from '../../components/shared/Loadr';
 
 export type SignupData = {
   username: string;
@@ -41,11 +42,15 @@ const SignUp = () => {
   // }
 
   return (
-    <section className="max-w-[100%] min-h-[100vh] w-full mx-auto dark:bg-veryDarkGrey">
-      <div className="max-w-[400px] mx-auto py-12">
+    <section className="app-container max-w-[100%] min-h-[100vh] w-full mx-auto relative overflow-hidden">
+      <div className="max-w-[400px] mx-auto my-12 px-4 py-2 rounded-[10px] shadow text-white bg-[#0d0240] border border-gray-600">
         <div className="mx-[16px]">
-          <div>NotesApp</div>
-          <h1 className="pt-16 pb-1 font-bold text-xl text-center">Create your account</h1>
+          <div>
+            <div className="logo-main bg-[#0d0240] text-white py-[30px] px-[20px] absolute top-0 left-0">
+              NotesApp
+            </div>
+          </div>
+          <h1 className="pt-8 pb-1 font-bold text-xl text-center">Create your account</h1>
           <article className="pb-8 text-center sm:text-[16px] text-[14px]">
             Please note that the sign-up process requires email verification. Your email address will only be used to
             verify your identity in order to ensure security.
@@ -125,12 +130,14 @@ const SignUp = () => {
                   <br />
                   <div className="my-2 lg:block flex justify-center items-center">
                     <button
+                      disabled={isLoading}
                       type="submit"
-                      className="gen-btn-class w-full py-3 rounded-[5px] h-[48px] text-[18px] flex items-center justify-center font-medium"
+                      className="gen-btn-class bg-[#000] text-[#fff] w-full h-[48px] rounded-[5px] text-[18px] flex items-center justify-center font-medium"
                     >
-                      {!isLoading ? 'SIGN UP' : 'Loader'}
+                      {!isLoading ? 'SIGN UP' : <Loader />}
                     </button>
                   </div>
+
 
                   <div className="text-center py-4">
                     Already have an account? &nbsp;

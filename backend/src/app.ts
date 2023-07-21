@@ -19,8 +19,8 @@ export const httpServer = http.createServer(app);
 export const io = new Server(httpServer, {
     transports: ['websocket'],
     cors: {
-        origin: 'http://127.0.0.1:5174',
-        methods: ['GET', 'POST'],
+        origin:  process.env.BASE_URL,
+        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     }
 });
 
@@ -36,9 +36,8 @@ io.on('connection', (socket: Socket) => {
     console.log('A user connected.');
 
     socket.emit('currentNotes', noteController.createNoteHandler)
-    socket.emit('updatedNotes', noteController.updateNoteHandler)
-    socket.emit('deletedNotes', noteController.deleteNoteHandler)
 
+    // kwpt for reference, didn't see any use for it currently
     socket.on('isTyping', () => {
         socket.broadcast.emit('userTyping');
     });

@@ -1,144 +1,40 @@
-// import { useEffect, useState } from 'react';
-// import { Formik, Form, Field, ErrorMessage } from 'formik';
-// import * as Yup from 'yup';
-// import { createNote } from '../reducers/private/notes/noteSlice';
-// import { useAppDispatch, useAppSelector } from '../network/hooks';
-// import { Note } from '../reducers/private/notes/noteSlice';
-// import io from 'socket.io-client';
-// import { Editor } from '@tinymce/tinymce-react';
-
-// const socket = io('http://localhost:4000', { transports: ['websocket'] });
-
-// const initialValues = {
-//   title: '',
-//   note: '',
-//   status: '',
-//   createdBy: '',
-// };
-
-// const validationSchema = Yup.object({
-//   title: Yup.string().required('Title is required'),
-//   status: Yup.string().required('Status is required'),
-//   createdBy: Yup.string().required('Created By is required'),
-// });
-
-// const NoteForm = () => {
-//   const dispatch = useAppDispatch();
-//   const notes = useAppSelector((state) => state.note.notes);
-
-//   useEffect(() => {
-//     socket.on('noteCreated', (newNote: Note) => {
-//       const { title, note } = newNote;
-//       if (!notes.some((existingNote) => existingNote.title === title && existingNote.note === note)) {
-//         dispatch(createNote.fulfilled(newNote, '', { noteData: newNote }));
-//       }
-//     });
-
-//     return () => {
-//       socket.off('noteCreated');
-//     };
-//   }, [dispatch, notes]);
-
-//   const [noteEditorContent, setNoteEditorContent] = useState('');
-
-//   return (
-//     <>
-//       <Formik
-//         initialValues={initialValues}
-//         validationSchema={validationSchema}
-//         onSubmit={(values) => {
-//           values.note = noteEditorContent;
-
-//           dispatch(createNote({ noteData: values }));
-//         }}
-//       >
-//         {({ handleSubmit }) => (
-//           <Form onSubmit={handleSubmit}>
-//             <div>
-//               <Field type="text" name="title" placeholder="Enter title" label={'Title'} />
-//               <ErrorMessage name="title" component="div" />
-//             </div>
-
-
-//             <div>
-//               <Editor
-//                 apiKey="zmzfqa3lxt08vbiimz3xvv82g1ewodd5hqynx9d1557vvorj" 
-//                 value={noteEditorContent}
-//                 onEditorChange={setNoteEditorContent}
-//                 init={{
-//                   height: 300,
-//                   menubar: false,
-//                   plugins: 'lists wordcount code forecolor backcolor',
-//                   toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | code | numlist bullist | forecolor backcolor',
-//                 }}
-
-//               />
-//               <ErrorMessage name="note" component="div" />
-//             </div>
-
-//             <div>
-//               <Field type="text" name="status" placeholder="Enter status" />
-//               <ErrorMessage name="status" component="div" />
-//             </div>
-//             <div>
-//               <Field type="text" name="createdBy" placeholder="Enter createdBy" />
-//               <ErrorMessage name="createdBy" component="div" />
-//             </div>
-//             <button type="submit">Add Note</button>
-//           </Form>
-//         )}
-//       </Formik>
-//     </>
-//   );
-// };
-
-// export default NoteForm;
-
-
-
-
 import { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-// import * as Yup from 'yup';
-import { createNote } from '../../reducers/private/notes/noteSlice';
+import * as Yup from 'yup';
+import { createNote, getSharedNotes } from '../../reducers/private/notes/noteSlice';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
 import { Note } from '../../reducers/private/notes/noteSlice';
 import io from 'socket.io-client';
 import { Editor } from '@tinymce/tinymce-react';
 import Select from 'react-select';
 import Dropdown from '../shared/Dropdown';
+import { tagOptions } from '../../utils/general';
+import { useNavigate } from 'react-router-dom';
 
-const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
-
-
-
-// const validationSchema = Yup.object({
-//   category: Yup.string().required('Category is required'),
-//   title: Yup.string().required('Title is required'),
-//   tags: Yup.array().test('max-tags', 'You can add a maximum of 3 tags', (value) => {
-//     return !value || value.length <= MAX_TAGS;
-//   }),
-//   status: Yup.string().required('Status is required'),
-//   createdBy: Yup.string().required('Created By is required'),
-//   note: Yup.string().required('Note is required'),
-// });
-
-const MAX_TAGS = 3;
-const tagOptions = [
-  { value: '#tag1', label: '#Tag 1' },
-  { value: '#tag2', label: '#Tag 2' },
-  { value: '#tag3', label: '#Tag 3' },
-  { value: '#tag4', label: '#Tag 4' },
-  { value: '#tag5', label: '#Tag 5' },
-];
+interface Props {
+  setIsNoteForm: any
+}
 
 
 
 
-
-const NoteForm = () => {
+const NoteForm = ({ setIsNoteForm }: Props) => {
   const dispatch = useAppDispatch();
   const notes = useAppSelector((state) => state.note.notes);
+  const { isLoading, isSuccess} = useAppSelector((state) => state.note);
+  const navigate = useNavigate();
+
+  const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
+  const MAX_TAGS = 3;
+  const validationSchema = Yup.object({
+    category: Yup.string().required('Category is required'),
+    title: Yup.string().required('Title is required'),
+    tags: Yup.array().test('max-tags', 'You can add a maximum of 3 tags', (value) => {
+      return !value || value.length <= MAX_TAGS;
+    }),
+    isPersonal: Yup.boolean().required('Please select if it is a personal note or not'),
+    note: Yup.string().required('Note is required'),
+  });
 
   useEffect(() => {
     socket.on('noteCreated', (newNote: Note) => {
@@ -147,36 +43,41 @@ const NoteForm = () => {
         dispatch(createNote.fulfilled(newNote, '', { noteData: newNote }));
       }
     });
-
     return () => {
       socket.off('noteCreated');
     };
-  }, [dispatch, notes]);
+  }, [dispatch, notes, socket]);
+
 
   const [noteEditorContent, setNoteEditorContent] = useState('');
   const [selectedTags, setSelectedTags] = useState<{ value: string; label: string }[]>([]);
-  const category = ['fun', 'school', 'home']
-  
+  const category = [...new Set(notes?.map((val: Note) => val.category))];
+
+
 
   return (
-    <>
+    <div>
+      <h2 className='pb-2'>Create Note</h2>
       <Formik
         initialValues={{
           category: '',
           title: '',
-          tags: [] as any,
+          tags: [] as string[],
           isPersonal: false,
           note: '',
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         onSubmit={(values) => {
+          values.tags = selectedTags.map(tag => tag.value) as string[];
           values.note = noteEditorContent;
-          values.tags = selectedTags.map(tag => tag.value) as string[]; // Explicitly cast the type
 
           dispatch(createNote({ noteData: values }));
+          dispatch(getSharedNotes());
+          
+          isSuccess && setIsNoteForm(false)
+          navigate(-1)
         }}
       >
-        {/* {({ handleSubmit }) => ( */}
         {(props) => (
 
           <Form className='!text-black' onSubmit={props.handleSubmit}>
@@ -187,16 +88,18 @@ const NoteForm = () => {
               label={'category'}
             />
             <div>
-              <Field type="text" name="title" className="w-full py-1 mt-4" placeholder="Enter title" />
-              <ErrorMessage name="title" component="div" />
+              <Field type="text" name="title" className="w-full py-2 rounded-[5px] my-5 px-2 " placeholder="Enter title" />
+              <ErrorMessage className={'text-red-500 text-[12px]'} name="title" component="div" />
             </div>
 
             <div>
-              <label htmlFor="tags">Tags</label>
               <Select
                 isMulti
-                value={selectedTags} // Use selectedTags for the value
+                value={selectedTags}
                 options={tagOptions}
+                onBlur={() => {
+                  props.setFieldTouched('tags', true);
+                }}
                 onChange={(selectedOptions) => {
                   if (selectedOptions && selectedOptions.length > MAX_TAGS) {
                     setSelectedTags(selectedOptions.slice(0, MAX_TAGS));
@@ -206,21 +109,25 @@ const NoteForm = () => {
                 }}
                 placeholder="Select tags..."
               />
-              <ErrorMessage name="tags" component="div" />
+              {props.touched.tags && props.errors.tags && (
+                <div className={'text-red-500 text-[12px]'}>{props.errors.tags}</div>
+              )}
             </div>
 
-
-            <div className='flex items-center space-x-2 py-3'>
-              <p className='text-white'>Is a personal note</p>
+            <div className="flex items-center space-x-2 py-3">
+              <p className="text-white text-[18px]">Is a personal note?</p>
               <Field type="checkbox" name="isPersonal" />
             </div>
 
             <div>
-              <label htmlFor="note">Note</label>
               <Editor
                 apiKey="zmzfqa3lxt08vbiimz3xvv82g1ewodd5hqynx9d1557vvorj"
                 value={noteEditorContent}
                 onEditorChange={setNoteEditorContent}
+                onBlur={() => {
+                  props.setFieldValue('note', noteEditorContent);
+                  props.setFieldTouched('note', true);
+                }}
                 init={{
                   height: 300,
                   menubar: false,
@@ -229,53 +136,16 @@ const NoteForm = () => {
                   toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | code | numlist bullist | forecolor backcolor',
                 }}
               />
-              <ErrorMessage name="note" component="div" />
+              <ErrorMessage className={'text-red-500 text-[12px]'} name="note" component="div" />
             </div>
 
-            <button className="bg-black text-white px-4 py-1" type="submit">
-              Add Note</button>
+            <button className="bg-[#2a3e71] text-white px-4 py-2 mt-4 rounded-[10px] w-full" type="submit">
+              {isLoading ? 'Adding Note...' : 'Add Note'}</button>
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };
 
 export default NoteForm;
-
-
-
-
-
-// // {isPreviewMode && (
-// //     <div className='bg-red-500 w-[600px]'>
-// //       <h1>{formik.values.title}</h1>
-// //       <div dangerouslySetInnerHTML={{ __html: noteEditorContent }} />
-// //       <p>{formik.values.status}</p>
-// //       <p>{formik.values.createdBy}</p>
-// //     </div>
-// //   )}
-
-// //   {/* Add Preview and Edit buttons */}
-// //   {isPreviewMode ? (
-// //     <button type="button" onClick={handleEditClick}>
-// //       Edit
-// //     </button>
-// //   ) : (
-// //     <button type="button" onClick={handlePreviewClick}>
-// //       Preview
-// //     </button>
-// //   )}
-
- {/* Add Preview and Edit buttons */}
-// //                         {isPreviewMode ? (
-// //                             <button type="button" onClick={handleEditClick}>
-// //                                 Edit
-// //                             </button>
-// //                         ) : (
-// //                             <button type="button" onClick={handlePreviewClick}>
-// //                                 Preview
-// //                             </button>
-// //                         )}
-
-// //                         <button type="submit">{isPreviewMode ? 'Save' : 'Add Note'}</button>

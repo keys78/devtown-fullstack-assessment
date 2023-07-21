@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useRef } from 'react'
 import useOnClickOutside from '../hooks/useOnClickOutside';
 import { backdropVariant, modalVariant } from '../../utils/animations';
+import { X } from 'phosphor-react';
 
 interface props {
     showModal: boolean,
@@ -29,7 +30,8 @@ const Modal = ({ showModal, setShowModal, general, children }: props) => {
                         <motion.div
                             ref={modalRef}
                             variants={modalVariant}
-                            className={`${general} max-w-[480px] w-full bg-[#a88bcb] dark:bg-darkGrey rounded-md text-black dark:text-white sm:p-8 p-5 overflow-auto `} >
+                            className={`${general} max-w-[480px] w-full bg-[#0d0240] border border-gray-500 rounded-md text-white sm:p-8 p-5 overflow-auto relative`} >
+                                <button className='absolute top-3 right-4' onClick={() => setShowModal(false)}><X size={32} color='#fff' weight='fill'/></button>
                             {children}
                         </motion.div>
                     </motion.div>

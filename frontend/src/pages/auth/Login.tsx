@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
 import { loginUser } from '../../reducers/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import Loader from '../../components/shared/Loadr';
 
 export type LoginData = {
   email: string;
@@ -42,11 +43,11 @@ const Login = () => {
   };
 
   return (
-    <div className="app-container max-w-[100%] min-h-[100vh] w-full mx-auto relative overflow-hidden dark:bg-veryDarkGrey">
-      <div className="max-w-[400px] mx-auto py-12">
+    <div className="app-container max-w-[100%] min-h-[100vh] w-full mx-auto relative overflow-hidden">
+      <div className="max-w-[400px] mx-auto my-12 px-4 py-10 rounded-[10px] shadow text-white bg-[#0d0240] border border-gray-600">
         <div className="mx-[16px]">
           <div>
-            <div className="logo-main bg-black text-white py-[30px] px-[20px] absolute top-0 left-0">
+            <div className="logo-main bg-[#0d0240] text-white py-[30px] px-[20px] absolute top-0 left-0">
               NotesApp
             </div>
           </div>
@@ -125,7 +126,7 @@ const Login = () => {
                       type="submit"
                       className="gen-btn-class bg-[#000] text-[#fff] w-full h-[48px] rounded-[5px] text-[18px] flex items-center justify-center font-medium"
                     >
-                      {!isLoading ? 'LOG IN' : 'Loader...'}
+                      {!isLoading ? 'LOG IN' : <Loader />}
                     </button>
                   </div>
 

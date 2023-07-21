@@ -1,12 +1,10 @@
-
-
-import { RequestHandler, Request, Response, NextFunction } from "express";
+import { RequestHandler, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import NoteModel, { Note } from "../models/note";
 import UserModel from "../models/user";
 import { io } from "../app";
 import { AuthRequest } from "./user";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 
 
@@ -49,8 +47,8 @@ export const getSingleNoteHandler: RequestHandler<{ id: string }> = async (req:A
     const note: Note | null = await NoteModel.findOne({
       _id: noteId,
       $or: [
-        { isPersonal: false }, // Shared note can be accessed by anyone
-        { isPersonal: true, 'author.id': userId }, // Personal note can only be accessed by the owner
+        { isPersonal: false }, // here Sared note can be accessed by anyone
+        { isPersonal: true, 'author.id': userId }, //My Personal notes can only be accessed by me
       ],
     }).exec();
 
@@ -133,9 +131,11 @@ export const updateNoteHandler: RequestHandler<any, any, Partial<Note>, any> = a
 };
 
 
+
+
 export const deleteNoteHandler: RequestHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.user || {};
+    // const { id } = req.user || {};
     const noteId = req.params.noteId;
 
     const existingNote = await NoteModel.findById(noteId);
@@ -143,9 +143,10 @@ export const deleteNoteHandler: RequestHandler = async (req: AuthRequest, res: R
       return res.status(404).json({ message: "Note not found" });
     }
 
-    if (existingNote.author.id.toString() !== id) {
-      return res.status(403).json({ message: "You are not authorized to delete this note" });
-    }
+    // for now I will allow anyone to erase a public note
+    // if (existingNote.author.id.toString() !== id) {
+    //   return res.status(403).json({ message: "You are not authorized to delete this note" });
+    // }
 
     const deletedNote = await existingNote.deleteOne();
     io.emit("noteDeleted", deletedNote._id);

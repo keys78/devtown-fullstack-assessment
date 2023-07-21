@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
-import { deleteNote, getNote, getPersonalNotes, getSharedNotes } from '../../reducers/private/notes/noteSlice';
+import { getNote } from '../../reducers/private/notes/noteSlice';
 import DOMPurify from 'dompurify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, TrashSimple } from 'phosphor-react';
+import { ArrowLeft } from 'phosphor-react';
 import moment from 'moment';
 import Modal from '../../components/modal/Modal';
 import UpdateNote from '../../components/modal/UpdateNote';
+import DeleteNote from '../../components/modal/DeleteNote';
+import Loader from '../../components/shared/Loadr';
 
 const NoteDetails = () => {
   const { noteId } = useParams<{ noteId: string }>();
@@ -31,20 +33,15 @@ const NoteDetails = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; 
+    return <div className='flex items-center justify-center s-480:h-[400px] h-[200px]'><Loader /></div>
+
   }
 
   if (!note) {
-    return <div>Note not found</div>; 
+    return <div>Note not found</div>;
   }
 
-  const deleteNoteAction = () => {
-    dispatch(deleteNote({noteId: noteId}))
-    isLoading && setIsDeleteNote(false)
-    isLoading && dispatch(getSharedNotes());
-    isLoading && dispatch(getPersonalNotes());
-    navigate(-1)
-}
+
 
   return (
     <div>
@@ -56,36 +53,19 @@ const NoteDetails = () => {
         </div>
       </div>
       <div>
-        <h4 className='text-[30px]'>{note?.title}</h4>
-        <h6 className=' pb-4 italic text-[12px]'>{moment(note?.createdAt).startOf('seconds').fromNow()}</h6>
-        <div dangerouslySetInnerHTML={sanitizeHTML(note?.note)} />
+        <h4 className='s-767:text-[30px] text-[18px]'>{note?.title}</h4>
+        <h6 className=' pb-4 italic s-767:text-[12px] text-[10px]'>{moment(note?.createdAt).startOf('seconds').fromNow()}</h6>
+        <div className='s-767:text-[16px] text-[14px]' dangerouslySetInnerHTML={sanitizeHTML(note?.note)} />
         <div className='flex items-center justify-between border-t border-gray-50 mt-4 py-4'>
           <div>Author: {note?.author?.username}</div>
           <div className='flex space-x-2'>{note?.tags?.map((tag: any) => <span className='shadow p-1 text-[12px] rounded bg-[#0e032a]'>{tag}</span>)}</div>
         </div>
       </div>
       <Modal setShowModal={setIsDeleteNote} showModal={isDeleteNote}>
-      <div className="space-y-6 w-full mx-auto rounded-md ">
-            <h1 className="text-red-500 font-bold text-[16px]">Delete this Note?</h1>
-            <p className="text-[13px] text-black">Are you sure you want to delete the &apos;{note?.title}&apos;? This action cannot be reversed.</p>
-            <div className="flex gap-4">
-                <button
-                    onClick={deleteNoteAction}
-                    className="bg-red-500 text-white text-[13px] w-[200px] rounded-[5px]" type="submit">
-                    {isLoading ?
-                        <span className='flex items-center justify-center'> Deleting... </span>
-                        :
-                        <span className='flex items-center justify-center'> <TrashSimple size={16} color="#fff" weight='bold' /> &nbsp;&nbsp; Delete   </span>
-                    }
-                </button>
-                <button onClick={() => setIsDeleteNote(false)} className="gen-btn-class w-[200px] bg-black text-white text-[13px] rounded-[5px] p-2 transition duration-200 gen-btn-class"  >
-                    Cancel
-                </button>
-            </div>
-        </div>
+       <DeleteNote setIsDeleteNote={setIsDeleteNote} note={note} noteId={noteId}/>
       </Modal>
       <Modal setShowModal={setIsUpdateNote} showModal={isUpdateNote}>
-       <UpdateNote note={note}/>
+        <UpdateNote note={note} />
       </Modal>
     </div>
   );

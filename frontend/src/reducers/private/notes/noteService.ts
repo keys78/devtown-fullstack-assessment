@@ -2,8 +2,8 @@ import axios from "axios"
 import { IToken } from "../../../types"
 import { toast } from "react-toastify"
 
-// import io from 'socket.io-client';
-// const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
+import io from 'socket.io-client';
+const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
 const toastOptions = {
     autoClose: 2000,
     hideProgressBar: true,
@@ -54,20 +54,20 @@ const createNote = async (taskData: any, token: IToken) => {
         },
     }
     const { data } = await axios.post(import.meta.env.VITE_APP_BASE_API + `api/v1/notes/create-note`, taskData, config)
-    // socket.emit('noteCreated', data)
+    socket.on('noteCreated', data)
     toast.success(data?.message, toastOptions);
     return data
 }
 
 
-const updateNote = async (nodeId: any, noteData: unknown, token: IToken) => {
+const updateNote = async (noteId: any, noteData: unknown, token: IToken) => {
     const config = {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
         },
     }
-    const { data } = await axios.patch(import.meta.env.VITE_APP_BASE_API + `api/v1/notes/update-note/${nodeId}`, noteData, config)
+    const { data } = await axios.patch(import.meta.env.VITE_APP_BASE_API + `api/v1/notes/update-note/${noteId}`, noteData, config)
     toast.success(data?.message, toastOptions);
     return data
 }

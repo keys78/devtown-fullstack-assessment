@@ -15,7 +15,7 @@ const Navbar = () => {
 
     useEffect(() => {
         dispatch(getUser())
-    }, [])
+    }, [dispatch])
 
     return (
         <>
@@ -36,7 +36,7 @@ const Navbar = () => {
                 </section>
             </nav>
             <Modal setShowModal={setIsNoteForm} showModal={isNoteForm}>
-                <NoteForm />
+                <NoteForm setIsNoteForm={setIsNoteForm}/>
             </Modal>
             <Modal setShowModal={setIsProfile} showModal={isProfile}>
                 <div>

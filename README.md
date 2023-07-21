@@ -62,8 +62,11 @@ To set up and run the frontend application locally, follow these step-by-step in
      
 ## Interface Overview
 
-*Introduce the user to the app's main interface, highlighting key elements and functionalities.
-*
+Introduce the user to the app's main interface, highlighting key elements and functionalities.
+* 1 - Login Page, which has a link to the Sign Up page if a user isn't authenticated yet.
+* 2 - On an authenticated user login display the Dashboard which has the person and shared notes folder, as well as the navbar with the Home, AddNote and User Profile CTA button inclusive.
+* 3 - The personal folder has categories and all the notes that are personal to a user and vice versa for the shared folder.
+* 4 - On add the shared folder part, user can actively create, update and delete note in real-time
 
 ## API Reference
 * Login
@@ -71,6 +74,33 @@ To set up and run the frontend application locally, follow these step-by-step in
 * Verify email
 * Get Shared Note
 * Create Note
+* Update Note
+* Delete Note
+
+
+
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `users` | `object` | **Required**. null |
+| `id` | `string` | **Required**. null |
+| `notes` | `string` | **Required**. null |
+| `note` | `string` | **Required**. null |
+
 
 
 ## Challenges and Solution Strategies
+`Vercel 404 Error On Refresh` -  I was able to fix this after a quick research which involves me calling my redirect tio index.html within the rewrites file.
+
+
+`SocketIO Connection Issues` - Haven't used this tech before, I had to read up the docs and watch some practial videos online which enable me get over this hurdle.
+
+`Time Constraints` - Due to the short timeline of the assessment, I wasn't able to fix up the forgot password page and change password as well.
+
+
+# Browser Tests Screenshots
+![](https://hackmd.io/_uploads/SyUMGNdc2.png)
+![](https://hackmd.io/_uploads/r1uGfN_qh.png)
+![](https://hackmd.io/_uploads/HJ9Mz4uch.png)
+![](https://hackmd.io/_uploads/SkuMfNuch.png)
+![](https://hackmd.io/_uploads/SJ8L4Nu53.png)
