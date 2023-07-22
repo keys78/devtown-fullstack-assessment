@@ -4,27 +4,24 @@ import * as Yup from 'yup';
 import { createNote, getSharedNotes } from '../../reducers/private/notes/noteSlice';
 import { useAppDispatch, useAppSelector } from '../../network/hooks';
 import { Note } from '../../reducers/private/notes/noteSlice';
-import io from 'socket.io-client';
 import { Editor } from '@tinymce/tinymce-react';
 import Select from 'react-select';
 import Dropdown from '../shared/Dropdown';
 import { tagOptions } from '../../utils/general';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
-  setIsNoteForm: any
+  setIsNoteForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-
-
 
 const NoteForm = ({ setIsNoteForm }: Props) => {
   const dispatch = useAppDispatch();
   const notes = useAppSelector((state) => state.note.notes);
-  const { isLoading, isSuccess} = useAppSelector((state) => state.note);
-  const navigate = useNavigate();
+  const { isLoading, isSuccess } = useAppSelector((state) => state.note);
+  const [noteEditorContent, setNoteEditorContent] = useState('');
+  const [selectedTags, setSelectedTags] = useState<{ value: string; label: string }[]>([]);
+  const category = [...new Set(notes?.map((val: Note) => val.category))];
 
-  const socket = io(import.meta.env.VITE_APP_BASE_API, { transports: ['websocket'] });
+
   const MAX_TAGS = 3;
   const validationSchema = Yup.object({
     category: Yup.string().required('Category is required'),
@@ -37,22 +34,10 @@ const NoteForm = ({ setIsNoteForm }: Props) => {
   });
 
   useEffect(() => {
-    socket.on('noteCreated', (newNote: Note) => {
-      const { title, note } = newNote;
-      if (!notes.some((existingNote) => existingNote.title === title && existingNote.note === note)) {
-        dispatch(createNote.fulfilled(newNote, '', { noteData: newNote }));
-      }
-    });
-    return () => {
-      socket.off('noteCreated');
-    };
-  }, [dispatch, notes, socket]);
+    dispatch(getSharedNotes())
+  }, [dispatch])
 
-
-  const [noteEditorContent, setNoteEditorContent] = useState('');
-  const [selectedTags, setSelectedTags] = useState<{ value: string; label: string }[]>([]);
-  const category = [...new Set(notes?.map((val: Note) => val.category))];
-
+  
 
 
   return (
@@ -64,22 +49,16 @@ const NoteForm = ({ setIsNoteForm }: Props) => {
           title: '',
           tags: [] as string[],
           isPersonal: false,
-          note: '',
+          note: noteEditorContent,
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          values.tags = selectedTags.map(tag => tag.value) as string[];
-          values.note = noteEditorContent;
-
+          values.tags = selectedTags.map(tag => tag.value) as string[]
           dispatch(createNote({ noteData: values }));
-          dispatch(getSharedNotes());
-          
-          isSuccess && setIsNoteForm(false)
-          navigate(-1)
+          isSuccess === true && setIsNoteForm(false)
         }}
       >
         {(props) => (
-
           <Form className='!text-black' onSubmit={props.handleSubmit}>
             <Dropdown
               item={category}
@@ -95,6 +74,7 @@ const NoteForm = ({ setIsNoteForm }: Props) => {
             <div>
               <Select
                 isMulti
+                className='relative z-50'
                 value={selectedTags}
                 options={tagOptions}
                 onBlur={() => {

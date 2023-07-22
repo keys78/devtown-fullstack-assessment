@@ -18,12 +18,12 @@ const PersonalNotes = () => {
 
   const handleCategoryGet = (note: { category?: string }) => {
     if (note?.category) {
-      const queryParams = new URLSearchParams({ q: note.category });
+      const queryParams = new URLSearchParams({ q: note?.category });
       navigate(`/personal/catalog?${queryParams.toString()}`);
     }
   };
 
-  const uniqueCategories = Array.from(new Set(notes.map((note) => note.category)));
+  const uniqueCategories = Array.from(new Set(notes.map((note) => note?.category)));
 
   const categoryCounts = new Map();
   notes.forEach((note) => {

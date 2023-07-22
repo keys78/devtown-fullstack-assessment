@@ -99,11 +99,7 @@ export const createNoteHandler: RequestHandler<any, any, Note, any> = async (req
 
 
 
-export const updateNoteHandler: RequestHandler<any, any, Partial<Note>, any> = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateNoteHandler: RequestHandler<any, any, Partial<Note>, any> = async ( req: AuthRequest, res: Response, next: NextFunction) => {
   const { category, title, tags, isPersonal, note } = req.body;
 
   try {

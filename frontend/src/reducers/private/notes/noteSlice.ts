@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Dispatch, PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { IToken } from "../../../types";
 import noteService from "./noteService";
 import { Auth } from "../../auth/authSlice";
@@ -18,7 +18,7 @@ export interface Note {
   _id?: string;
   category: string;
   title: string;
-  tags: string[]; 
+  tags: string[];
   isPersonal: boolean;
   note: string;
 }
@@ -99,12 +99,25 @@ export const getNote = createAsyncThunk<Note[], any>(
   }
 );
 
+
+const createdNoteIds: string[] = [];
+
+export const listenToNoteCreated = () => (dispatch: Dispatch) => {
+  socket.on('noteCreated', (newNote: Note) => {
+    if (newNote._id && !createdNoteIds.includes(newNote._id)) {
+      createdNoteIds.push(newNote._id);
+      dispatch(createNote.fulfilled(newNote, '', { noteData: newNote }));
+    }
+  });
+};
+
 export const createNote = createAsyncThunk<Note, { noteData: Note }>(
   'create-note',
   async ({ noteData }, thunkAPI) => {
     const token: IToken = (thunkAPI.getState() as { auth: Auth }).auth.token || token2;
     try {
       const newNote = await noteService.createNote(noteData, token);
+
       return newNote;
     } catch (error: any) {
       errorHandler(error, thunkAPI);
@@ -112,6 +125,9 @@ export const createNote = createAsyncThunk<Note, { noteData: Note }>(
     }
   }
 );
+
+
+
 
 
 export const updateNote = createAsyncThunk<any, any>(
@@ -148,7 +164,10 @@ export const noteSlice = createSlice({
   initialState,
   reducers: {
     resetBoard: () => initialState,
-     //SORTING NOTES
+    noteCreated: (state, action: PayloadAction<Note>) => {
+      state.notes.push(action.payload);
+    },
+    //SORTING NOTES
     sortByNameZA: (state) => {
       const sortedNotes = [...state.notes].sort((a, b) => b.title.localeCompare(a.title));
       state.notes = sortedNotes;
@@ -157,8 +176,8 @@ export const noteSlice = createSlice({
       const sortedNotes = [...state.notes].sort((a, b) => a.title.localeCompare(b.title));
       state.notes = sortedNotes;
     },
-   
-    
+
+
 
   },
   extraReducers: (builder) => {
@@ -210,6 +229,7 @@ export const noteSlice = createSlice({
         state.isSuccess = true;
         state.notes.push(action.payload);
       })
+
       .addCase(createNote.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
@@ -229,31 +249,24 @@ export const noteSlice = createSlice({
         state.message = action.payload as string;
       })
 
-
-
       .addCase(deleteNote.pending, (state) => {
         state.isLoading = true
       })
-
       .addCase(deleteNote.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
         if (Array.isArray(state.notes)) {
           state.notes = state.notes.filter((note: Note) => note._id !== action.payload?._id)
         }
-        state.message = action?.payload?.message || 'task deleted'
+        state.message = action?.payload?.message || 'note deleted'
       })
       .addCase(deleteNote.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.message = action.payload as string || 'unable to delete task'
+        state.message = action.payload as string || 'unable to delete note'
       })
   },
 });
-
-export const cleanupSocketListener = () => {
-  socket.off('noteCreated');
-};
 
 export const { resetBoard, sortByNameZA, sortByNameAZ } = noteSlice.actions;
 export default noteSlice.reducer;

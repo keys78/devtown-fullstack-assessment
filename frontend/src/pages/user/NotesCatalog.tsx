@@ -55,7 +55,7 @@ const NotesCatalog = () => {
       ))
     : notes?.filter(note => note?.title?.toLowerCase().includes(searchQuery?.toLowerCase()));
 
-  const handleSortChange = (event: { target: { value: any; }; }) => {
+  function handleSortChange(event: { target: { value: any; }; }) {
     const selectedSortOption = event.target.value;
     setSortOption(selectedSortOption);
     switch (selectedSortOption) {
@@ -68,7 +68,7 @@ const NotesCatalog = () => {
       default:
         break;
     }
-  };
+  }
 
   return (
     <div>
